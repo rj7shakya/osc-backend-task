@@ -24,9 +24,10 @@ router.post("/signup", async (req, res) => {
     const token = jwt.sign(data.toJSON(), process.env.JWTKEY);
     result.token = token;
     result.data = data;
+    return res.status(200).send(result);
   }
 
-  return res.send(result);
+  return res.status(400).send(result);
 });
 
 router.post("/login", async (req, res) => {
@@ -46,9 +47,10 @@ router.post("/login", async (req, res) => {
   if (result.error === "") {
     const token = jwt.sign(data.toJSON(), process.env.JWTKEY);
     result.token = token;
+    return res.status(200).send(result);
   }
 
-  return res.send(result);
+  return res.status(400).send(result);
 });
 
 module.exports = router;

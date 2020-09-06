@@ -17,7 +17,7 @@ const signupSchema = Joi.object().keys({
 
 function validate(data, schema) {
   const result = schema.validate(data);
-  let res = { data: data, error: {} };
+  let res = { data: data, error: "", token: "" };
   if (result.error) {
     res.error = result.error.details[0].message;
     return res;

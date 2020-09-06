@@ -8,5 +8,6 @@ app.use(express.json());
 app.use(morgan("tiny"));
 app.use("/v1/users/profile", users);
 app.use("/v1/auth/", auth);
+require("dotenv").config();
 
 app.listen(3000, () => console.log("Port started at 3000"));

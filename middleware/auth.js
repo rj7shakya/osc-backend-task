@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
 
 function auth(req, res, next) {
-  const token = req.header("x-auth-token");
-  if (!token) res.send("Unauthorized");
+  let token = req.header("Authorization");
+  if (!token) res.status(400).send("Unauthorized");
+  token = token.substring(7);
 
   try {
     const decoded = jwt.verify(token, process.env.JWTKEY);

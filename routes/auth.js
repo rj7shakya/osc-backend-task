@@ -21,7 +21,7 @@ router.post("/signup", async (req, res) => {
     user.password = await bcrypt.hash(user.password, salt);
     const data = await user.save();
     delete result.data.password;
-    const token = jwt.sign(result.data, process.env.JWTKEY);
+    const token = jwt.sign(data.toJSON(), process.env.JWTKEY);
     result.token = token;
     result.data = data;
   }
@@ -32,14 +32,19 @@ router.post("/signup", async (req, res) => {
 router.post("/login", async (req, res) => {
   const result = validate(req.body, loginSchema);
   let data = await User.findOne({ email: req.body.email });
-  if (!data) result.error = "User doesnt exists";
-
-  const validPassword = await bcrypt.compare(req.body.password, data.password);
-  if (!validPassword) result.error = "Invalid password";
-  delete result.data.password;
+  if (!data) {
+    result.error = "User doesnt exists";
+  } else {
+    const validPassword = await bcrypt.compare(
+      req.body.password,
+      data.password
+    );
+    if (!validPassword) result.error = "Invalid password";
+    delete result.data.password;
+  }
 
   if (result.error === "") {
-    const token = jwt.sign(result.data, process.env.JWTKEY);
+    const token = jwt.sign(data.toJSON(), process.env.JWTKEY);
     result.token = token;
   }
 

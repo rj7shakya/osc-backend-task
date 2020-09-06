@@ -2,6 +2,8 @@ const Joi = require("joi");
 
 const updateSchema = Joi.object().keys({
   name: Joi.string().required(),
+  email: Joi.string().email(),
+  password: Joi.string().min(4),
 });
 
 const loginSchema = Joi.object().keys({
